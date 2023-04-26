@@ -41,6 +41,10 @@
   width: 8em;
 }
 
+.key_clicked {
+  background: lightgreen;
+}
+
 .key_space {
   width: 30em;
 }

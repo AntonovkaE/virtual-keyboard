@@ -8,6 +8,14 @@ keyboard.classList.add('keyboard')
 const textArea = document.createElement('input')
 textArea.classList.add('textarea')
 
+function addInInput (char) {
+  textArea.value = textArea.value + char
+}
+
+function isChar (char) {
+ return char.length === 1
+}
+
 
 function charIsLetter(char) {
   if (typeof char !== 'string') {
@@ -57,10 +65,16 @@ for (let rowNumb in keysEn) {
     if (charIsLetter(key)) {
       keyElement.classList.add('key_letter')
     }
+
     isWideKey(key, keyElement)
     keyElement.textContent = key
     keyElement.setAttribute("type", "button");
     keyElement.classList.add("keyboard__key");
+    if (isChar(key)) {
+      keyElement.addEventListener("click", () => {
+        addInInput(key)
+      })
+    }
     row.appendChild(keyElement);
   })
   keyboard.appendChild(row)

@@ -15,7 +15,9 @@ function addInInput (char) {
 }
 
 function clickKey(item) {
+
   if (item.textContent === 'CapsLock') {
+    capsOn = !capsOn
     toggleSize(item)
   }
   item.classList.add('key_clicked')

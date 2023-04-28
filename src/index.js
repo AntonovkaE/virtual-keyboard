@@ -7,6 +7,48 @@ keyboard.classList.add('keyboard');
 let capsOn = false
 let capsLockKey;
 
+for (let rowNumb in keysEn) {
+  let row = document.createElement('div')
+  row.classList.add('keyboard__row')
+  keysEn[rowNumb].forEach(key => {
+    const keyElement = document.createElement("button");
+    keyElement.addEventListener('mousedown', () => {
+      clickKey(keyElement)
+    })
+    // keyElement.addEventListener('click', () => {
+    //   setTimeout(() => {
+    //     keyElement.classList.remove('key_clicked')
+    //   }, 500)
+    //
+    // })
+    if (charIsLetter(key)) {
+      keyElement.classList.add('key_letter')
+    }
+    if (key === 'Shift') {
+      keyElement.classList.add('key_shift')
+      keyElement.addEventListener('click',() => {
+        setTimeout(() => {
+          capsOn = !capsOn
+          toggleSize()
+        }, 500)
+
+      })
+    }
+    isWideKey(key, keyElement)
+    keyElement.textContent = key
+    keyElement.setAttribute("type", "button");
+    keyElement.classList.add("keyboard__key");
+    if (isChar(key)) {
+      keyElement.addEventListener("click", () => {
+        addInInput(keyElement.textContent)
+      })
+    }
+    row.appendChild(keyElement);
+  })
+  keyboard.appendChild(row)
+}
+
+
 const textArea = document.createElement('textarea')
 textArea.classList.add('textarea')
 
@@ -15,14 +57,20 @@ function addInInput (char) {
 }
 
 function clickKey(item) {
-
   if (item.textContent === 'CapsLock') {
     capsOn = !capsOn
-    toggleSize(item)
+    item.classList.toggle('key_clicked')
+    toggleSize()
+    return
+  } else if (item.textContent === 'Shift') {
+    capsOn = !capsOn
+    console.log('shift clicked')
+    toggleSize()
+    item.classList.add('key_clicked')
   }
   item.classList.add('key_clicked')
   setTimeout(() => {
-    if (item.textContent !== 'CapsLock') item.classList.remove('key_clicked')
+    item.classList.remove('key_clicked')
   }, 1000)
 }
 
@@ -38,17 +86,15 @@ function charIsLetter(char) {
   return (/^[a-zA-Za-яА-Я]+$/.test(char) && char.length === 1);
 }
 
-function toggleSize(capsKey) {
+function toggleSize() {
+  console.log("toggle", capsOn)
   const keys = Array.from(document.querySelectorAll('.key_letter'));
   keys.forEach(key => {
     if (capsOn) {
-      capsKey.classList.add('key_clicked')
       key.textContent = key.textContent.toUpperCase()
     } else {
-      capsKey.classList.remove('key_clicked')
       key.textContent = key.textContent.toLowerCase()
     }
-
   })
 }
 
@@ -59,10 +105,10 @@ function isWideKey(key, keyElement) {
       capsLockKey = keyElement;
       keyElement.classList.add('key_wide');
       keyElement.addEventListener('click', () => {
-        toggleSize(keyElement)
+        toggleSize()
       })
     case 'tab':
-    case 'shift':
+    case 'Shift':
     case 'enter':
     case 'backspace':
       keyElement.classList.add('key_wide');
@@ -73,42 +119,25 @@ function isWideKey(key, keyElement) {
   }
 }
 
-for (let rowNumb in keysEn) {
-  let row = document.createElement('div')
-  row.classList.add('keyboard__row')
-  keysEn[rowNumb].forEach(key => {
-    const keyElement = document.createElement("button");
-    keyElement.addEventListener('click', () => {
-      clickKey(keyElement)
-    })
-    if (charIsLetter(key)) {
-      keyElement.classList.add('key_letter')
-    }
 
-    isWideKey(key, keyElement)
-    keyElement.textContent = key
-    keyElement.setAttribute("type", "button");
-    keyElement.classList.add("keyboard__key");
-
-    if (isChar(key)) {
-      keyElement.addEventListener("click", () => {
-        addInInput(keyElement.textContent)
-      })
-    }
-    row.appendChild(keyElement);
-  })
-  keyboard.appendChild(row)
-}
 fragment.appendChild(textArea)
 fragment.appendChild(keyboard)
+
 document.querySelector('body').appendChild(fragment)
+let shiftKeys = Array.from(document.querySelectorAll('.key_shift'))
+
 
 document.addEventListener('keydown', function(event) {
-  capsOn = event.getModifierState("CapsLock")
-  if (event.key === 'CapsLock') {
-    toggleSize(capsLockKey)
+  console.log(event.code)
+  if (event.code === 'ShiftLeft') {
+    clickKey(shiftKeys[0])
+    shiftKeys[0].classList.add('key_clicked')
+    return
+  } else if (event.code === 'ShiftRight') {
+    clickKey(shiftKeys[1])
+    shiftKeys[1].classList.add('key_clicked')
+    return;
   }
-
   const keys = Array.from(document.querySelectorAll('.keyboard__key'))
   keys.map(item => {
     if (item.textContent.toLowerCase() === event.key.toLowerCase()) {
@@ -117,9 +146,18 @@ document.addEventListener('keydown', function(event) {
   })
 });
 document.addEventListener('keyup', (event) => {
-  capsOn = event.getModifierState("CapsLock")
-  if (event.key === 'CapsLock') {
-
-    toggleSize(capsLockKey)
+  console.log(event)
+  if (event.key === 'CapsLock' || event.key === 'Shift') {
+    capsOn = !capsOn
+    toggleSize()
+    if (event.key === 'CapsLock') {
+      capsLockKey.classList.toggle('key_clicked')
+    } else if (event.code === 'ShiftLeft') {
+      shiftKeys[0].classList.remove('key_clicked')
+    } else if (event.code === 'ShiftRight') {
+      shiftKeys[1].classList.remove('key_clicked')
+    }
   }
+
+
 })

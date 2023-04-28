@@ -18,17 +18,12 @@
 .keyboard__key {
   width: 5em;
   height: 5em;
-  background-image: -webkit-gradient(
-    linear,left bottom,left top,
-    color-stop(0.27, rgb(212,216,219)),
-    color-stop(0.64, rgb(213,217,220)),
-    color-stop(0.95, rgb(230,233,235)),
-    color-stop(1, rgb(191,191,191))
-  );
+  background-color: lavenderblush;
   border-radius: 10px;
   -webkit-box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
   -moz-box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
   box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
+  transition: background-color ease-in-out 0.4s, border-radius ease-in-out 1s ;
 }
 
 .keyboard__row {
@@ -43,6 +38,7 @@
 
 .key_clicked {
   background: lightgreen;
+  border-radius: 20px;
 }
 
 .key_space {

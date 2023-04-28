@@ -44,6 +44,13 @@ for (let rowNumb in keysEn) {
         addInInput(keyElement.textContent);
       });
     }
+    if (key === 'AltLeft') {
+      keyElement.textContent = 'option'
+      keyElement.classList.add('key_alt-left')
+    } else if (key === 'AltRight') {
+      keyElement.textContent = 'option'
+      keyElement.classList.add('key_alt-right')
+    }
     row.appendChild(keyElement);
   });
   keyboard.appendChild(row);
@@ -122,7 +129,9 @@ fragment.appendChild(textArea);
 fragment.appendChild(keyboard);
 
 document.querySelector('body').appendChild(fragment);
-let shiftKeys = Array.from(document.querySelectorAll('.key_shift'));
+const shiftKeys = Array.from(document.querySelectorAll('.key_shift'));
+const altKeyLeft = document.querySelector('.key_alt-left')
+const altKeyRight = document.querySelector('.key_alt-right')
 
 document.addEventListener('keydown', function (event) {
   textArea.focus()
@@ -135,6 +144,10 @@ document.addEventListener('keydown', function (event) {
     clickKey(shiftKeys[1]);
     shiftKeys[1].classList.add('key_clicked');
     return;
+  } else if (event.code === 'AltLeft') {
+    clickKey(altKeyLeft)
+  } else if (event.code === 'AltRight') {
+    clickKey(altKeyRight)
   }
   const keys = Array.from(document.querySelectorAll('.keyboard__key'));
   keys.map(item => {

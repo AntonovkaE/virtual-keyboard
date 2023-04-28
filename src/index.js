@@ -35,8 +35,12 @@ for (let rowNumb in keysEn) {
     if (key === 'Space') {
       keyElement.textContent = ' '
     }
-    if (isChar(key) || key === 'Space') {
+    if (isChar(key) || key === 'Space' || key === 'Tab') {
       keyElement.addEventListener('click', () => {
+        if (keyElement.textContent === 'Tab') {
+          addInInput('    ')
+          return
+        }
         addInInput(keyElement.textContent);
       });
     }
@@ -47,10 +51,12 @@ for (let rowNumb in keysEn) {
 
 const textArea = document.createElement('textarea');
 textArea.classList.add('textarea');
+textArea.value = ''
 textArea.focus()
 
 function addInInput(char) {
   textArea.value = textArea.value + char;
+  console.log(textArea.value)
 }
 
 function clickKey(item) {

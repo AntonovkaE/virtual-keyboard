@@ -50,6 +50,12 @@ for (let rowNumb in keysEn) {
     } else if (key === 'AltRight') {
       keyElement.textContent = 'option'
       keyElement.classList.add('key_alt-right')
+    } else if (key === 'cmdLeft') {
+      keyElement.textContent = 'cmd'
+      keyElement.classList.add('key_cmd-left')
+    } else if (key === 'cmdRight') {
+      keyElement.textContent = 'cmd'
+      keyElement.classList.add('key_cmd-right')
     }
     row.appendChild(keyElement);
   });
@@ -132,6 +138,8 @@ document.querySelector('body').appendChild(fragment);
 const shiftKeys = Array.from(document.querySelectorAll('.key_shift'));
 const altKeyLeft = document.querySelector('.key_alt-left')
 const altKeyRight = document.querySelector('.key_alt-right')
+const cmdLeft = document.querySelector('.key_cmd-left')
+const cmdRight = document.querySelector('.key_cmd-right')
 
 document.addEventListener('keydown', function (event) {
   textArea.focus()
@@ -148,6 +156,10 @@ document.addEventListener('keydown', function (event) {
     clickKey(altKeyLeft)
   } else if (event.code === 'AltRight') {
     clickKey(altKeyRight)
+  } else if (event.code === 'MetaLeft') {
+    clickKey(cmdLeft)
+  } else if (event.code === 'MetaRight') {
+    clickKey(cmdRight)
   }
   const keys = Array.from(document.querySelectorAll('.keyboard__key'));
   keys.map(item => {

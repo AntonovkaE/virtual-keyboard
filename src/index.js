@@ -9,6 +9,8 @@ let capsLockKey;
 
 for (let rowNumb in keysEn) {
   let row = document.createElement('div');
+  let arrowContainer = document.createElement('div')
+  arrowContainer.classList.add('keyboard_arrows')
   row.classList.add('keyboard__row');
   keysEn[rowNumb].forEach(key => {
     const keyElement = document.createElement('button');
@@ -56,9 +58,22 @@ for (let rowNumb in keysEn) {
     } else if (key === 'cmdRight') {
       keyElement.textContent = 'cmd'
       keyElement.classList.add('key_cmd-right')
+    } else if (key === "←") {
+      keyElement.classList.add('key_arrow-left')
+    } else if (key === "↑") {
+      keyElement.classList.add('key_arrow-up')
+    } else if (key === "↓") {
+      keyElement.classList.add('key_arrow-down')
+    } else if (key === "→") {
+      keyElement.classList.add('key_arrow-right')
     }
-    row.appendChild(keyElement);
+    if (key === "↑" || key === "↓") {
+      arrowContainer.appendChild(keyElement)
+    } else {
+      row.appendChild(keyElement);
+    }
   });
+  row.appendChild(arrowContainer)
   keyboard.appendChild(row);
 }
 
@@ -69,7 +84,6 @@ textArea.focus()
 
 function addInInput(char) {
   textArea.value = textArea.value + char;
-  console.log(textArea.value)
 }
 
 function clickKey(item) {
@@ -140,6 +154,10 @@ const altKeyLeft = document.querySelector('.key_alt-left')
 const altKeyRight = document.querySelector('.key_alt-right')
 const cmdLeft = document.querySelector('.key_cmd-left')
 const cmdRight = document.querySelector('.key_cmd-right')
+const arrowUp = document.querySelector('.key_arrow-up')
+const arrowDown = document.querySelector('.key_arrow-down')
+const arrowLeft = document.querySelector('.key_arrow-left')
+const arrowRight = document.querySelector('.key_arrow-right')
 
 document.addEventListener('keydown', function (event) {
   textArea.focus()
@@ -160,6 +178,14 @@ document.addEventListener('keydown', function (event) {
     clickKey(cmdLeft)
   } else if (event.code === 'MetaRight') {
     clickKey(cmdRight)
+  } else if (event.code === 'ArrowUp') {
+    clickKey(arrowUp)
+  } else if (event.code === 'ArrowDown') {
+    clickKey(arrowDown)
+  } else if (event.code === 'ArrowLeft') {
+    clickKey(arrowLeft)
+  } else if (event.code === 'ArrowRight') {
+    clickKey(arrowRight)
   }
   const keys = Array.from(document.querySelectorAll('.keyboard__key'));
   keys.map(item => {

@@ -45,3 +45,16 @@
 .key_space {
   width: 30em;
 }
+.keyboard_arrows {
+  display: flex;
+  flex-direction: column;
+}
+
+.key_arrow-up,
+.key_arrow-down {
+  height: 2.4em;
+}
+
+.key_arrow-right {
+  order: 10;
+}

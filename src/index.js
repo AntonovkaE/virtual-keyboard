@@ -47,6 +47,7 @@ for (let rowNumb in keysEn) {
 
 const textArea = document.createElement('textarea');
 textArea.classList.add('textarea');
+textArea.focus()
 
 function addInInput(char) {
   textArea.value = textArea.value + char;
@@ -118,6 +119,7 @@ document.querySelector('body').appendChild(fragment);
 let shiftKeys = Array.from(document.querySelectorAll('.key_shift'));
 
 document.addEventListener('keydown', function (event) {
+  textArea.focus()
   console.log(event.code);
   if (event.code === 'ShiftLeft') {
     clickKey(shiftKeys[0]);

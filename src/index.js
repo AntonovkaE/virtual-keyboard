@@ -6,6 +6,10 @@ let keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
 let capsOn = false;
 let capsLockKey;
+const textArea = document.createElement('textarea');
+textArea.classList.add('textarea');
+textArea.value = ''
+textArea.focus()
 
 for (let rowNumb in keysEn) {
   let row = document.createElement('div');
@@ -28,6 +32,11 @@ for (let rowNumb in keysEn) {
           toggleSize();
         }, 500);
       });
+    } else if (key === 'backspace') {
+      keyElement.addEventListener('click', () => {
+        textArea.value = textArea.value ? textArea.value.slice(0, -1) : ''
+      })
+
     }
 
     isWideKey(key, keyElement);
@@ -76,11 +85,6 @@ for (let rowNumb in keysEn) {
   row.appendChild(arrowContainer)
   keyboard.appendChild(row);
 }
-
-const textArea = document.createElement('textarea');
-textArea.classList.add('textarea');
-textArea.value = ''
-textArea.focus()
 
 function addInInput(char) {
   textArea.value = textArea.value + char;

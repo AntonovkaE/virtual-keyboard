@@ -1,22 +1,86 @@
 import './pages/index.css';
-import { keysEn } from './utils/keys';
+import keysEn from './utils/keys.js';
 
-let fragment = new DocumentFragment();
-let keyboard = document.createElement('div');
+const fragment = new DocumentFragment();
+const keyboard = document.createElement('div');
 keyboard.classList.add('keyboard');
 let capsOn = false;
 let capsLockKey;
 const textArea = document.createElement('textarea');
 textArea.classList.add('textarea');
-textArea.value = ''
-textArea.focus()
+textArea.value = '';
+textArea.focus();
 
-for (let rowNumb in keysEn) {
-  let row = document.createElement('div');
-  let arrowContainer = document.createElement('div')
-  arrowContainer.classList.add('keyboard_arrows')
+function charIsLetter(char) {
+  if (typeof char !== 'string') {
+    return false;
+  }
+  return (/^[a-zA-Za-яА-Я]+$/.test(char) && char.length === 1);
+}
+
+function toggleSize() {
+  const keys = Array.from(document.querySelectorAll('.key_letter'));
+  keys.forEach((key) => {
+    const letterKey = key;
+    letterKey.textContent = capsOn ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+  });
+}
+
+function isChar(char) {
+  return char.length === 1;
+}
+
+function addInInput(char) {
+  textArea.value += char;
+}
+
+function isWideKey(key, keyElement) {
+  /* eslint-disable no-fallthrough */
+  switch (key) {
+    case 'CapsLock':
+      capsLockKey = keyElement;
+      keyElement.classList.add('key_wide');
+      keyElement.addEventListener('click', () => {
+        toggleSize();
+      });
+    case 'Tab':
+    case 'Shift':
+    case 'enter':
+    case 'backspace':
+      keyElement.classList.add('key_wide');
+      break;
+    case 'Space':
+      keyElement.classList.add('key_space');
+      break;
+    default:
+      break;
+  }
+  /* eslint-enable no-fallthrough */
+}
+
+function clickKey(item) {
+  if (item.textContent === 'CapsLock') {
+    capsOn = !capsOn;
+    item.classList.toggle('key_clicked');
+    toggleSize();
+    return;
+  }
+  if (item.textContent === 'Shift') {
+    capsOn = !capsOn;
+    toggleSize();
+    item.classList.add('key_clicked');
+  }
+  item.classList.add('key_clicked');
+  setTimeout(() => {
+    item.classList.remove('key_clicked');
+  }, 1000);
+}
+Object.keys(keysEn).forEach((rowNumb) => {
+  const row = document.createElement('div');
+  const arrowContainer = document.createElement('div');
+  arrowContainer.classList.add('keyboard_arrows');
   row.classList.add('keyboard__row');
-  keysEn[rowNumb].forEach(key => {
+  keysEn[rowNumb].forEach((key) => {
     const keyElement = document.createElement('button');
     keyElement.addEventListener('mousedown', () => {
       clickKey(keyElement);
@@ -34,9 +98,8 @@ for (let rowNumb in keysEn) {
       });
     } else if (key === 'backspace') {
       keyElement.addEventListener('click', () => {
-        textArea.value = textArea.value ? textArea.value.slice(0, -1) : ''
-      })
-
+        textArea.value = textArea.value ? textArea.value.slice(0, -1) : '';
+      });
     }
 
     isWideKey(key, keyElement);
@@ -44,162 +107,99 @@ for (let rowNumb in keysEn) {
     keyElement.setAttribute('type', 'button');
     keyElement.classList.add('keyboard__key');
     if (key === 'Space') {
-      keyElement.textContent = ' '
+      keyElement.textContent = ' ';
     }
     if (isChar(key) || key === 'Space' || key === 'Tab') {
       keyElement.addEventListener('click', () => {
         if (keyElement.textContent === 'Tab') {
-          addInInput('    ')
-          return
+          addInInput('    ');
+          return;
         }
         addInInput(keyElement.textContent);
       });
     }
     if (key === 'AltLeft') {
-      keyElement.textContent = 'option'
-      keyElement.classList.add('key_alt-left')
+      keyElement.textContent = 'option';
+      keyElement.classList.add('key_alt-left');
     } else if (key === 'AltRight') {
-      keyElement.textContent = 'option'
-      keyElement.classList.add('key_alt-right')
+      keyElement.textContent = 'option';
+      keyElement.classList.add('key_alt-right');
     } else if (key === 'cmdLeft') {
-      keyElement.textContent = 'cmd'
-      keyElement.classList.add('key_cmd-left')
+      keyElement.textContent = 'cmd';
+      keyElement.classList.add('key_cmd-left');
     } else if (key === 'cmdRight') {
-      keyElement.textContent = 'cmd'
-      keyElement.classList.add('key_cmd-right')
-    } else if (key === "←") {
-      keyElement.classList.add('key_arrow-left')
-    } else if (key === "↑") {
-      keyElement.classList.add('key_arrow-up')
-    } else if (key === "↓") {
-      keyElement.classList.add('key_arrow-down')
-    } else if (key === "→") {
-      keyElement.classList.add('key_arrow-right')
+      keyElement.textContent = 'cmd';
+      keyElement.classList.add('key_cmd-right');
+    } else if (key === '←') {
+      keyElement.classList.add('key_arrow-left');
+    } else if (key === '↑') {
+      keyElement.classList.add('key_arrow-up');
+    } else if (key === '↓') {
+      keyElement.classList.add('key_arrow-down');
+    } else if (key === '→') {
+      keyElement.classList.add('key_arrow-right');
     }
-    if (key === "↑" || key === "↓") {
-      arrowContainer.appendChild(keyElement)
+    if (key === '↑' || key === '↓') {
+      arrowContainer.appendChild(keyElement);
     } else {
       row.appendChild(keyElement);
     }
   });
-  row.appendChild(arrowContainer)
+  row.appendChild(arrowContainer);
   keyboard.appendChild(row);
-}
-
-function addInInput(char) {
-  textArea.value = textArea.value + char;
-}
-
-function clickKey(item) {
-  if (item.textContent === 'CapsLock') {
-    capsOn = !capsOn;
-    item.classList.toggle('key_clicked');
-    toggleSize();
-    return;
-  } else if (item.textContent === 'Shift') {
-    capsOn = !capsOn;
-    toggleSize();
-    item.classList.add('key_clicked');
-  }
-  item.classList.add('key_clicked');
-  setTimeout(() => {
-    item.classList.remove('key_clicked');
-  }, 1000);
-}
-
-function isChar(char) {
-  return char.length === 1;
-}
-
-function charIsLetter(char) {
-  if (typeof char !== 'string') {
-    return false;
-  }
-  return (/^[a-zA-Za-яА-Я]+$/.test(char) && char.length === 1);
-}
-
-function toggleSize() {
-  const keys = Array.from(document.querySelectorAll('.key_letter'));
-  keys.forEach(key => {
-    if (capsOn) {
-      key.textContent = key.textContent.toUpperCase();
-    } else {
-      key.textContent = key.textContent.toLowerCase();
-    }
-  });
-}
-
-function isWideKey(key, keyElement) {
-  switch (key) {
-    case 'CapsLock':
-      capsLockKey = keyElement;
-      keyElement.classList.add('key_wide');
-      keyElement.addEventListener('click', () => {
-        toggleSize();
-      });
-    case 'tab':
-    case 'Shift':
-    case 'enter':
-    case 'backspace':
-      keyElement.classList.add('key_wide');
-      break;
-    case 'Space':
-      keyElement.classList.add('key_space');
-      break;
-  }
-}
-
+});
 fragment.appendChild(textArea);
 fragment.appendChild(keyboard);
 
 document.querySelector('body').appendChild(fragment);
 const shiftKeys = Array.from(document.querySelectorAll('.key_shift'));
-const altKeyLeft = document.querySelector('.key_alt-left')
-const altKeyRight = document.querySelector('.key_alt-right')
-const cmdLeft = document.querySelector('.key_cmd-left')
-const cmdRight = document.querySelector('.key_cmd-right')
-const arrowUp = document.querySelector('.key_arrow-up')
-const arrowDown = document.querySelector('.key_arrow-down')
-const arrowLeft = document.querySelector('.key_arrow-left')
-const arrowRight = document.querySelector('.key_arrow-right')
+const altKeyLeft = document.querySelector('.key_alt-left');
+const altKeyRight = document.querySelector('.key_alt-right');
+const cmdLeft = document.querySelector('.key_cmd-left');
+const cmdRight = document.querySelector('.key_cmd-right');
+const arrowUp = document.querySelector('.key_arrow-up');
+const arrowDown = document.querySelector('.key_arrow-down');
+const arrowLeft = document.querySelector('.key_arrow-left');
+const arrowRight = document.querySelector('.key_arrow-right');
 
-document.addEventListener('keydown', function (event) {
-  textArea.focus()
-  console.log(event.code);
+document.addEventListener('keydown', (event) => {
+  textArea.focus();
   if (event.code === 'ShiftLeft') {
     clickKey(shiftKeys[0]);
     shiftKeys[0].classList.add('key_clicked');
     return;
-  } else if (event.code === 'ShiftRight') {
+  }
+  if (event.code === 'ShiftRight') {
     clickKey(shiftKeys[1]);
     shiftKeys[1].classList.add('key_clicked');
     return;
-  } else if (event.code === 'AltLeft') {
-    clickKey(altKeyLeft)
+  }
+  if (event.code === 'AltLeft') {
+    clickKey(altKeyLeft);
   } else if (event.code === 'AltRight') {
-    clickKey(altKeyRight)
+    clickKey(altKeyRight);
   } else if (event.code === 'MetaLeft') {
-    clickKey(cmdLeft)
+    clickKey(cmdLeft);
   } else if (event.code === 'MetaRight') {
-    clickKey(cmdRight)
+    clickKey(cmdRight);
   } else if (event.code === 'ArrowUp') {
-    clickKey(arrowUp)
+    clickKey(arrowUp);
   } else if (event.code === 'ArrowDown') {
-    clickKey(arrowDown)
+    clickKey(arrowDown);
   } else if (event.code === 'ArrowLeft') {
-    clickKey(arrowLeft)
+    clickKey(arrowLeft);
   } else if (event.code === 'ArrowRight') {
-    clickKey(arrowRight)
+    clickKey(arrowRight);
   }
   const keys = Array.from(document.querySelectorAll('.keyboard__key'));
-  keys.map(item => {
+  keys.forEach((item) => {
     if (item.textContent.toLowerCase() === event.key.toLowerCase()) {
-      clickKey(item);
+      return clickKey(item);
     }
+    return null;
   });
 });
 document.addEventListener('keyup', (event) => {
-  console.log(event);
   if (event.key === 'CapsLock' || event.key === 'Shift') {
     capsOn = !capsOn;
     toggleSize();
@@ -211,5 +211,4 @@ document.addEventListener('keyup', (event) => {
       shiftKeys[1].classList.remove('key_clicked');
     }
   }
-
 });

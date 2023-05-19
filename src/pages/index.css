@@ -1,0 +1,60 @@
+.textarea {
+  width: 90%;
+  display: block;
+  font-size: 3rem;
+  margin: 2em auto;
+  box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
+}
+
+.keyboard {
+  display: flex;
+  width: 90%;
+  max-width: 1280px;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 5em auto;
+}
+
+
+.keyboard__key {
+  width: 5em;
+  height: 5em;
+  background-color: lavenderblush;
+  border-radius: 10px;
+  -webkit-box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
+  -moz-box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
+  box-shadow: 4px 4px 5px 0px rgba(100,100,100,0.5);
+  transition: background-color ease-in-out 0.4s, border-radius ease-in-out 1s ;
+}
+
+.keyboard__row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.key_wide {
+  width: 8em;
+}
+
+.key_clicked {
+  background: lightgreen;
+  border-radius: 20px;
+}
+
+.key_space {
+  width: 30em;
+}
+.keyboard_arrows {
+  display: flex;
+  flex-direction: column;
+}
+
+.key_arrow-up,
+.key_arrow-down {
+  height: 2.4em;
+}
+
+.key_arrow-right {
+  order: 10;
+}
